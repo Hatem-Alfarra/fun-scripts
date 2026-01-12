@@ -17,7 +17,7 @@ struct Node
  *
  * returned is the pointer to the new head pNewNode.
  * */
-struct Node* push(struct Node* pNode, int newValue)
+struct Node* push(struct Node *pNode, int newValue)
 {	
 	struct Node *pNewNode = malloc(sizeof(struct Node));	
 	pNewNode->value = newValue;
@@ -43,17 +43,17 @@ struct Node* push(struct Node* pNode, int newValue)
  *
  * returned is a pointer to the new head after popping.
  * */
-struct Node* pop(struct Node* node)
+struct Node* pop(struct Node *pNode)
 {
-	if (node == NULL) { return NULL; }
+	if (pNode == NULL) { return NULL; }
 
+	struct Node *pNextNode = pNode->next;
 
-	struct Node *pNextNode = malloc(sizeof(struct Node));
-	if (node->next == NULL) { return NULL; }
-	pNextNode = node->next;
+	if (pNextNode == NULL) { free(pNode); return NULL; }
+
 	pNextNode->prev = NULL;
 
-	free(node);
+	free(pNode);
 	
 	return pNextNode;
 }
@@ -172,11 +172,13 @@ int main()
 	int newValue;
 	int validInput;
 
-	struct Node *pTAIL = malloc(sizeof(struct Node));
+	struct Node *pTAIL = NULL;
+
 	printf("First node value:\n");
 	validInput = scanf("%d", &newValue);
 	if (validInput)
 	{
+		pTAIL = malloc(sizeof(*pTAIL));
 		pTAIL->value = newValue;
 		pTAIL->next = NULL;
 		pTAIL->prev = NULL;
