@@ -37,12 +37,14 @@ void printLinkedList(struct Node* node){
 
 
 int main(){
-	
+	printf("Enter size of desired linked list:\n");
+	int extend_by;
+	scanf("%d", &extend_by);
 	struct Node *pTAIL = malloc(sizeof(struct Node));
 	pTAIL->value = 0;
 	pTAIL->next = NULL;
-	
-	struct Node *pHEAD = extendNode(pTAIL, 5);	
+
+	struct Node *pHEAD = extendNode(pTAIL, extend_by);	
 	
 	printLinkedList(pHEAD);
 
