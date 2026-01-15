@@ -17,18 +17,19 @@ struct Node
  *
  * returned is the pointer to the new head newNode.
  * */
-struct Node* push(struct Node *head, int newValue)
+struct Node* push(struct Node** head, int newValue)
 {	
 	struct Node *newNode = malloc(sizeof(struct Node));	
 	newNode->value = newValue;
 
-	if (head != NULL)
+	if (*head != NULL)
 	{
-		head->prev = newNode;
+		(*head)->prev = newNode;
 	}
-	newNode->next = head;
+	newNode->next = *head;
 	newNode->prev = NULL;
 
+	*head = newNode;
 
 	return newNode;
 }
@@ -36,111 +37,27 @@ struct Node* push(struct Node *head, int newValue)
 /* pop from a stack (the top element)
  *
  *
- * parameter head is expected to be the head pointer of a linked list or a NULL
- * pointer. Null pointers passed in return a Null pointer as well.
+ * parameter headRef is expected to be a pointer of the head pointer of the linked list.
  *
- * side effect is freeing of the popped node pointer from heap memory.
- *
- * returned is a pointer to the new head after popping.
- * */
-struct Node* pop(struct Node *head)
-{
-	if (head == NULL) { return NULL; }
-
-	struct Node *pNextNode = head->next;
-
-	if (pNextNode == NULL) { free(head); return NULL; }
-
-	pNextNode->prev = NULL;
-
-	free(head);
-	
-	return pNextNode;
-}
-
-/*
- * print linked list from Head to Tail.
- *
- * parameter head is the head pointer of the linked list.
- * 
- * side effect is printing list from Head to Tail.
+ * side effect is reassigning the head pointer to the next node and freeing of the popped
+ *  node (old head) from heap memory.
  *
  * */
-void printLinkedListForwards(struct Node *head)
+void pop(struct Node** headRef)
 {	
-	struct Node* curNode = head;
+	// If empty stack, nothing to do and exit function.
+	if (*headRef == NULL) { return; }
+
+	struct Node *old = *headRef;
 	
-	printf("FORWARDS: ");
-	printf("[HEAD]");
-	while (curNode != NULL) 
-	{
-		printf(" %d ->", (int) curNode->value);
-		curNode = curNode->next;
+	// Next node is the new head
+	*headRef = old->next;
+	if (*headRef != NULL){
+		// Disconnect the stack from old
+		(*headRef)->prev = NULL;
 	}
-	printf(" NULL ");
-	printf("[TAIL]\n");
-}
-
-
-/*
- * print linked list from Tail to Head.
- *
- * parameter head is the Tail pointer of the linked list.
- *
- * side effect is printing list from Tail to Head.
- *
- * */
-void printLinkedListBackwards(struct Node *tail)
-{	
-	struct Node* curNode = tail;
-	
-	printf("BACKWARDS: ");
-	printf("[TAIL]");
-	while (curNode != NULL) 
-	{
-		printf(" %d ->", (int) curNode->value);
-		curNode = curNode->prev;
-	}
-	printf(" NULL ");
-	printf("[HEAD]\n");
-}
-
-
-/*
- * print doubly linked list from Head to Tail.
- * 
- * parameter head is the Head pointer of the doubly linked list.
- *
- * side effect is printing list from Head to Tail.
- *
- * */
-void printDoublyLinkedList(struct Node* head)
-{
-	struct Node* curNode = head;
-
-	printf("Doubly linked list: ");
-	while (curNode != NULL) 
-	{	
-		if (curNode->next != NULL && curNode->prev != NULL)
-		{ 
-			printf(" %d <-->", (int) curNode->value);
-		}
-		if (curNode->next == NULL && curNode->prev == NULL)
-		{
-			printf("NULL <- %d -> NULL", (int) curNode->value);
-		} else if (curNode->prev == NULL)
-		{
-			printf("NULL <- %d ", (int) curNode->value);
-			if (curNode->next != NULL) { printf("<-->"); }
-		} else if (curNode->next == NULL) 
-		{ 
-			printf(" %d -> NULL", (int) curNode->value); 
-		}
-
-		curNode = curNode->next;
-	}
-
-	printf("\n");
+	// Free popped node
+	free(old);	
 }
 
 /*
@@ -164,17 +81,6 @@ void printStack(struct Node* head)
 
 	printf("\n");
 }
-
-
-
-void printAll(struct Node *head, struct Node *tail)
-{
-	//printLinkedListForwards(head);
-	//printLinkedListBackwards(tail);
-	//printDoublyLinkedList(head);
-	printStack(head);
-}
-
 
 
 int main()
@@ -206,16 +112,16 @@ int main()
 			isValid = scanf("%d", &newValue);
 			if (isValid)
 			{
-				head = push(head, newValue);
+				push(&head, newValue);
 				// If one element left it is also the tail
 				if (head == NULL) { tail = head; }
-				printAll(head, tail);
+				printStack(head);
 			} 
 		} else if (strcmp(action, "pop") == 0) 
 		{
-			head = pop(head);
+			pop(&head);
 			if (head == NULL) { tail = head; }
-			printAll(head, tail);
+			printStack(head);
 		} else printf("Valid actions are: push AND pop\n");
 		
 		printf("\n");
