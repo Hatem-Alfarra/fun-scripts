@@ -10,41 +10,75 @@ struct Node
 	struct Node* prev;
 };
 
-struct Node* extendNode(struct Node* node, int newValue)
+
+struct Node* extendNode(struct Node** headRef, int val)
 {	
-	struct Node *pNewNode = malloc(sizeof(struct Node));
-	pNewNode->value = newValue;
-	pNewNode->next = node;
-	pNewNode->prev = NULL;
+	struct Node *newNode = malloc(sizeof(struct Node));
+	newNode->value = val;
+	newNode->next = *headRef;
+	newNode->prev = NULL;
+		
+	// Set the prev of the old head to newNode.	
+       	(*headRef)->prev = newNode;
+	// newNode is the new head.
+	*headRef = newNode;
 
-	node->prev = pNewNode;
-
-	return pNewNode;
+	return *headRef;
 }
 
-
-void printLinkedListForwards(struct Node* node)
-{	
-	printf("[HEAD]");
-	while (node != NULL) {
-		printf(" %d ->", (int) node->value);
-		node = node->next;
+/*
+void printdllbackwards(struct Node* tail){	
+	struct Node* curNode = tail;
+	
+	printf("[TAIL]");
+	while (curNode != NULL) {
+		printf(" %d ->", (int) curNode->value);
+		curNode = curNode->prev;
 	}
 	printf(" NULL ");
-	printf("[TAIL]");
+
+	free(curNode);
 }
+*/
 
 
+/*
+ * print doubly linked list from Head to Tail.
+ * 
+ * parameter pNode is the Head pointer of the doubly linked list.
+ *
+ * side effect is printing list from Head to Tail.
+ *
+ * */
+void printDoublyLinkedList(struct Node* head)
+{
+	struct Node* curNode = head;
 
-void printLinkedListBackwards(struct Node* node)
-{	
-	printf("[TAIL]");
-	while (node != NULL) {
-		printf(" %d ->", (int) node->value);
-		node = node->prev;
+	//printf("Doubly linked list: ");
+	while (curNode != NULL) 
+	{	
+		if (curNode->next != NULL && curNode->prev != NULL)
+		{ 
+			printf(" %d <-->", (int) curNode->value);
+		}
+		if (curNode->next == NULL && curNode->prev == NULL)
+		{
+			printf("NULL <- %d -> NULL", (int) curNode->value);
+		} else if (curNode->prev == NULL)
+		{
+			printf("NULL <- %d ", (int) curNode->value);
+			if (curNode->next != NULL) { printf("<-->"); }
+		} else if (curNode->next == NULL) 
+		{ 
+			printf(" %d -> NULL", (int) curNode->value); 
+		}
+
+		curNode = curNode->next;
 	}
-	printf(" NULL ");
-	printf("[HEAD]");
+
+	printf("\n");
+
+	free(curNode);
 }
 
 
@@ -69,10 +103,9 @@ int main()
 		printf("\nEnter next value in doubly linked list:\n");
 		validInput = scanf("%d", &newValue);
 		if (validInput){
-			pHEAD = extendNode(pHEAD, newValue);
-			printLinkedListForwards(pHEAD);
+			extendNode(&pHEAD, newValue);
 			printf("\n");
-			printLinkedListBackwards(pTAIL);
+			printDoublyLinkedList(pHEAD);
 		}
 	}
 
