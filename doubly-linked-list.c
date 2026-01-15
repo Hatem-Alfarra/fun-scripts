@@ -26,21 +26,6 @@ struct Node* extendNode(struct Node** headRef, int val)
 	return *headRef;
 }
 
-/*
-void printdllbackwards(struct Node* tail){	
-	struct Node* curNode = tail;
-	
-	printf("[TAIL]");
-	while (curNode != NULL) {
-		printf(" %d ->", (int) curNode->value);
-		curNode = curNode->prev;
-	}
-	printf(" NULL ");
-
-	free(curNode);
-}
-*/
-
 
 /*
  * print doubly linked list from Head to Tail.
@@ -76,7 +61,7 @@ void printDoublyLinkedList(struct Node* head)
 		curNode = curNode->next;
 	}
 
-	printf("\n");
+	printf("\n\n");
 
 	free(curNode);
 }
@@ -85,27 +70,27 @@ void printDoublyLinkedList(struct Node* head)
 int main()
 {
 	int newValue;
-	int validInput;
+	int isValid;
 
-	struct Node *pTAIL = malloc(sizeof(struct Node));
+	struct Node *tail = malloc(sizeof(struct Node));
 	printf("First node value:\n");
-	validInput = scanf("%d", &newValue);
-	if (validInput)
+	isValid = scanf("%d", &newValue);
+	if (isValid)
 	{
-		pTAIL->value = newValue;
-		pTAIL->next = NULL;
-		pTAIL->prev = NULL;
+		tail->value = newValue;
+		tail->next = NULL;
+		tail->prev = NULL;
 	}
 
-	struct Node *pHEAD = pTAIL;
+	struct Node *head = tail;
 
-	while(validInput){
+	while(isValid){
 		printf("\nEnter next value in doubly linked list:\n");
-		validInput = scanf("%d", &newValue);
-		if (validInput){
-			extendNode(&pHEAD, newValue);
+		isValid = scanf("%d", &newValue);
+		if (isValid){
+			extendNode(&head, newValue);
 			printf("\n");
-			printDoublyLinkedList(pHEAD);
+			printDoublyLinkedList(head);
 		}
 	}
 
