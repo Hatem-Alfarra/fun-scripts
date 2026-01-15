@@ -12,48 +12,48 @@ struct Node
 
 /* push into a stack a new node with a value
  *
- * parameter pNode is expected to be the head pointer of a linked list.
+ * parameter head is expected to be the head pointer of a linked list.
  * parameter newValue is the desired value of the new node to be pushed.
  *
- * returned is the pointer to the new head pNewNode.
+ * returned is the pointer to the new head newNode.
  * */
-struct Node* push(struct Node *pNode, int newValue)
+struct Node* push(struct Node *head, int newValue)
 {	
-	struct Node *pNewNode = malloc(sizeof(struct Node));	
-	pNewNode->value = newValue;
+	struct Node *newNode = malloc(sizeof(struct Node));	
+	newNode->value = newValue;
 
-	if (pNode != NULL)
+	if (head != NULL)
 	{
-		pNode->prev = pNewNode;
+		head->prev = newNode;
 	}
-	pNewNode->next = pNode;
-	pNewNode->prev = NULL;
+	newNode->next = head;
+	newNode->prev = NULL;
 
 
-	return pNewNode;
+	return newNode;
 }
 
 /* pop from a stack (the top element)
  *
  *
- * parameter pNode is expected to be the head pointer of a linked list or a NULL
+ * parameter head is expected to be the head pointer of a linked list or a NULL
  * pointer. Null pointers passed in return a Null pointer as well.
  *
  * side effect is freeing of the popped node pointer from heap memory.
  *
  * returned is a pointer to the new head after popping.
  * */
-struct Node* pop(struct Node *pNode)
+struct Node* pop(struct Node *head)
 {
-	if (pNode == NULL) { return NULL; }
+	if (head == NULL) { return NULL; }
 
-	struct Node *pNextNode = pNode->next;
+	struct Node *pNextNode = head->next;
 
-	if (pNextNode == NULL) { free(pNode); return NULL; }
+	if (pNextNode == NULL) { free(head); return NULL; }
 
 	pNextNode->prev = NULL;
 
-	free(pNode);
+	free(head);
 	
 	return pNextNode;
 }
@@ -61,19 +61,21 @@ struct Node* pop(struct Node *pNode)
 /*
  * print linked list from Head to Tail.
  *
- * parameter pNode is the head pointer of the linked list.
+ * parameter head is the head pointer of the linked list.
  * 
  * side effect is printing list from Head to Tail.
  *
  * */
-void printLinkedListForwards(struct Node *pNode)
+void printLinkedListForwards(struct Node *head)
 {	
+	struct Node* curNode = head;
+	
 	printf("FORWARDS: ");
 	printf("[HEAD]");
-	while (pNode != NULL) 
+	while (curNode != NULL) 
 	{
-		printf(" %d ->", (int) pNode->value);
-		pNode = pNode->next;
+		printf(" %d ->", (int) curNode->value);
+		curNode = curNode->next;
 	}
 	printf(" NULL ");
 	printf("[TAIL]\n");
@@ -83,19 +85,21 @@ void printLinkedListForwards(struct Node *pNode)
 /*
  * print linked list from Tail to Head.
  *
- * parameter pNode is the Tail pointer of the linked list.
+ * parameter head is the Tail pointer of the linked list.
  *
  * side effect is printing list from Tail to Head.
  *
  * */
-void printLinkedListBackwards(struct Node *pNode)
+void printLinkedListBackwards(struct Node *tail)
 {	
+	struct Node* curNode = tail;
+	
 	printf("BACKWARDS: ");
 	printf("[TAIL]");
-	while (pNode != NULL) 
+	while (curNode != NULL) 
 	{
-		printf(" %d ->", (int) pNode->value);
-		pNode = pNode->prev;
+		printf(" %d ->", (int) curNode->value);
+		curNode = curNode->prev;
 	}
 	printf(" NULL ");
 	printf("[HEAD]\n");
@@ -105,33 +109,35 @@ void printLinkedListBackwards(struct Node *pNode)
 /*
  * print doubly linked list from Head to Tail.
  * 
- * parameter pNode is the Head pointer of the doubly linked list.
+ * parameter head is the Head pointer of the doubly linked list.
  *
  * side effect is printing list from Head to Tail.
  *
  * */
-void printDoublyLinkedList(struct Node* pNode)
+void printDoublyLinkedList(struct Node* head)
 {
+	struct Node* curNode = head;
+
 	printf("Doubly linked list: ");
-	while (pNode != NULL) 
+	while (curNode != NULL) 
 	{	
-		if (pNode->next != NULL && pNode->prev != NULL)
+		if (curNode->next != NULL && curNode->prev != NULL)
 		{ 
-			printf(" %d <-->", (int) pNode->value);
+			printf(" %d <-->", (int) curNode->value);
 		}
-		if (pNode->next == NULL && pNode->prev == NULL)
+		if (curNode->next == NULL && curNode->prev == NULL)
 		{
-			printf("NULL <- %d -> NULL", (int) pNode->value);
-		} else if (pNode->prev == NULL)
+			printf("NULL <- %d -> NULL", (int) curNode->value);
+		} else if (curNode->prev == NULL)
 		{
-			printf("NULL <- %d ", (int) pNode->value);
-			if (pNode->next != NULL) { printf("<-->"); }
-		} else if (pNode->next == NULL) 
+			printf("NULL <- %d ", (int) curNode->value);
+			if (curNode->next != NULL) { printf("<-->"); }
+		} else if (curNode->next == NULL) 
 		{ 
-			printf(" %d -> NULL", (int) pNode->value); 
+			printf(" %d -> NULL", (int) curNode->value); 
 		}
 
-		pNode = pNode->next;
+		curNode = curNode->next;
 	}
 
 	printf("\n");
@@ -140,29 +146,33 @@ void printDoublyLinkedList(struct Node* pNode)
 /*
  * print the stack
  *
- * parameter pNode is a head pointer of the stack 
+ * parameter head is a head pointer of the stack 
  *
  * */
-void printStack(struct Node* pNode)
+void printStack(struct Node* head)
 {
-	printf("Stack: ");
+	struct Node* curNode = head;
+
+	printf("\n\n");
 	printf("[TOP]");
-	while (pNode != NULL) 
+	while (curNode != NULL) 
 	{
-		printf(" %d ", (int) pNode->value);
-		pNode = pNode->next;
-		if (pNode != NULL) { printf("->"); }
+		printf(" %d ", (int) curNode->value);
+		curNode = curNode->next;
+		if (curNode != NULL) { printf("->"); }
 	}
+
+	printf("\n");
 }
 
 
 
-void printAll(struct Node *pHEAD, struct Node *pTAIL)
+void printAll(struct Node *head, struct Node *tail)
 {
-	printLinkedListForwards(pHEAD);
-	printLinkedListBackwards(pTAIL);
-	printDoublyLinkedList(pHEAD);
-	printStack(pHEAD);
+	//printLinkedListForwards(head);
+	//printLinkedListBackwards(tail);
+	//printDoublyLinkedList(head);
+	printStack(head);
 }
 
 
@@ -170,44 +180,45 @@ void printAll(struct Node *pHEAD, struct Node *pTAIL)
 int main()
 {
 	int newValue;
-	int validInput;
+	int isValid;
 
-	struct Node *pTAIL = NULL;
+	struct Node *tail;
 
 	printf("First node value:\n");
-	validInput = scanf("%d", &newValue);
-	if (validInput)
+	isValid = scanf("%d", &newValue);
+	if (isValid)
 	{
-		pTAIL = malloc(sizeof(*pTAIL));
-		pTAIL->value = newValue;
-		pTAIL->next = NULL;
-		pTAIL->prev = NULL;
+		tail = malloc(sizeof(struct Node));
+		tail->value = newValue;
+		tail->next = NULL;
+		tail->prev = NULL;
 	}
 
-	struct Node *pHEAD = pTAIL;
+	struct Node *head = tail;
 
-	while(validInput){
+	while(isValid){
 		char action[10];
-		printf("\n\nEnter action:\n");
+		printf("\nEnter action:\n");
 		scanf("%9s", action);
 		if (strcmp(action, "push") == 0)
 		{
 			printf("\nEnter value to push into stack:\n");
-			validInput = scanf("%d", &newValue);
-			if (validInput)
+			isValid = scanf("%d", &newValue);
+			if (isValid)
 			{
-				pHEAD = push(pHEAD, newValue);
+				head = push(head, newValue);
 				// If one element left it is also the tail
-				if (pTAIL == NULL) { pTAIL = pHEAD; }
+				if (head == NULL) { tail = head; }
+				printAll(head, tail);
 			} 
 		} else if (strcmp(action, "pop") == 0) 
 		{
-			pHEAD = pop(pHEAD);
-			if (pHEAD == NULL) { pTAIL = pHEAD; }
-		} else 
-			printf("Valid actions are: push AND pop\n");
-	
-		printAll(pHEAD, pTAIL);
+			head = pop(head);
+			if (head == NULL) { tail = head; }
+			printAll(head, tail);
+		} else printf("Valid actions are: push AND pop\n");
+		
+		printf("\n");
 	}
 
 	return 0;

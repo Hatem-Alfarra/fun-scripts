@@ -10,10 +10,10 @@ struct Node
 	struct Node* next;
 };
 
-struct Node* extendNode(struct Node** headRef, int newValue)
+struct Node* extendNode(struct Node** headRef, int val)
 {	
 	struct Node *newNode = malloc(sizeof(struct Node));
-	newNode->value = newValue;
+	newNode->value = val;
 	newNode->next = *headRef;
 
 	*headRef = newNode;

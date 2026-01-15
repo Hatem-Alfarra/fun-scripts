@@ -62,8 +62,6 @@ void printDoublyLinkedList(struct Node* head)
 	}
 
 	printf("\n\n");
-
-	free(curNode);
 }
 
 
