@@ -21,27 +21,36 @@ struct Node* extendNode(struct Node** headRef, int newValue)
 	return newNode;
 }
 
-
 void printLinkedList(struct Node* head)
 {	
-	struct Node *curNode = head;
-	while (curNode->next != NULL) {
+	struct Node* curNode = head;
+	
+	printf("[HEAD]");
+	while (curNode != NULL) {
 		printf(" %d ->", (int) curNode->value);
 		curNode = curNode->next;
 	}
-	printf(" NULL");
+	printf(" NULL ");
 }
 
 
 int main()
 {
 	struct Node *tail = malloc(sizeof(struct Node));
-	tail->value = 0;
-	tail->next = NULL;
+	struct Node *head;
+	int newValue;
+	int isValid;
 
-	struct Node *head = tail;
 
-	int isValid = 1;	
+	printf("\nEnter the first value of your linked list:\n");
+	isValid = scanf("%d", &newValue);
+	if (isValid){
+		tail->value = newValue;
+		tail->next = NULL;
+	}
+
+	head = tail;
+
 	while(isValid){
 		printf("\nEnter next value in linked list:\n");
 		int newValue;
