@@ -2,53 +2,54 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Node {
+typedef struct Node {
     int value;
     struct Node* behind;
-};
+}Node;
 
-struct queue {
-    struct Node *pFront;
-    struct Node *pBack;
-    int size;
-};
+typedef struct queue {
+    Node *pFront;
+    Node *pBack;
+//    int size;
+}queue;
 
-void initQueue(struct queue *pQ){
-    pQ->size = 0;
+void initQueue(queue *pQ){
+//    pQ->size = 0;
     pQ->pBack = NULL;
     pQ->pFront = NULL;
 }
 
-void enqueue(struct queue* pQ, int newValue){
-    struct Node* pNewNode = malloc(sizeof(struct Node));
+void enqueue(queue *pQ, int newValue){
+    Node *pNewNode = malloc(sizeof(Node));
     pNewNode->value = newValue;
 
-    int size = pQ->size;
-    if (size <= 0) {
+    //int size = pQ->size;
+    if (pQ->pBack == NULL) {
         pNewNode->behind = NULL;
         pQ->pBack = pNewNode;
         pQ->pFront = pNewNode;
-        pQ->size += 1;
+//        pQ->size += 1;
     } else {
         pNewNode->behind = NULL;
 //        pNewNode->next = pQ->behind;
         pQ->pBack->behind = pNewNode;
         pQ->pBack = pNewNode;
-        pQ->size += 1;
+//        pQ->size += 1;
     }
 }
 
-void dequeue(struct queue* pQ){
+void dequeue(queue* pQ){
     if (pQ->pFront == NULL) {return;}
-    struct Node* oldFront = pQ->pFront;
-    struct Node* newFront = oldFront->behind;
+    Node *oldFront = pQ->pFront;
+    Node *newFront = oldFront->behind;
     free(oldFront);
     pQ->pFront = newFront;
 //    newFront->next = NULL;
+//    (pQ->size)--
 }
 
-void printQueue(struct queue *pQ){
-    struct Node* curNode = pQ->pFront;
+void printQueue(queue *pQ){
+    Node *curNode = pQ->pFront;
     printf("[Front]");
 
     while(curNode != NULL){
@@ -64,7 +65,7 @@ void printQueue(struct queue *pQ){
 int main(){
     int newValue;
     int isValid;
-    struct queue *Q1 = malloc(sizeof(struct Node));
+    queue *Q1 = malloc(sizeof(Node));
 
 
     printf("First queue value:\n");
